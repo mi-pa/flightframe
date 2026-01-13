@@ -67,6 +67,8 @@ jobs:
 
     - name: Upload firmware artifacts
       uses: actions/upload-artifact@v4
+      env:
+        CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
       with:
         name: esp32-firmware-${{ matrix.ci_func }}
         path: ports/esp32/build*/*.bin
