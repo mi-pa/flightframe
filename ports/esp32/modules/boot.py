@@ -51,7 +51,7 @@ def main():
     else:
         if connect_wifi():
             print("Starting main application...")
-            # ✅ WebSocket-Client NUR starten wenn WiFi verbunden ist
+            # ✅ WebSocket-Client NUR starten wenn WiFi verbunden wurde
             try:
                 from websocket_client import main as ws_main
                 ws_main()
