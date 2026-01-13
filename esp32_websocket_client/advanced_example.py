@@ -110,7 +110,7 @@ def advanced_example():
     
     sock = socket.socket()
     sock.connect(addr)
-    print(f"TCP connection established")
+    print("TCP connection established")
     
     websocket_handshake(sock, host, WS_PATH)
     print("WebSocket handshake successful")
