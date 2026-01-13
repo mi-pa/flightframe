@@ -121,7 +121,6 @@ class WiFiProvisioning:
                 
                 # Parse request
                 request_line = request.split('\n')[0]
-                method = request_line.split()[0]
                 path = request_line.split()[1]
 
                 # Add method checking where needed
