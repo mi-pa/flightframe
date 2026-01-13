@@ -28,27 +28,45 @@ Architecture and design:
 
 ## 💻 Core Application Files
 
-### ⚙️ [config.py](config.py)
-**Edit this first!** Configuration file:
+### Production: Frozen Modules (in ports/esp32/modules/)
+
+#### ⚙️ [ports/esp32/modules/ws_config.py](../ports/esp32/modules/ws_config.py)
+**Edit this before building firmware!** Configuration file:
 ```python
 WIFI_SSID = "YOUR_WIFI_SSID"       # ← Change these
 WIFI_PASSWORD = "YOUR_WIFI_PASSWORD"
 WS_SERVER = "ws://example.com"
 ```
 
-### 🎯 [main.py](main.py)
-Main WebSocket client application:
+#### 🎯 [ports/esp32/modules/websocket_client.py](../ports/esp32/modules/websocket_client.py)
+Main WebSocket client (frozen into firmware):
 - WiFi connection
 - WebSocket handshake
 - Message receiving loop
 - Auto-reconnection
+- **Usage**: `import websocket_client; websocket_client.main()`
+
+### Development: Example Files (in esp32_websocket_client/)
+
+### ⚙️ [config.py](config.py)
+Standalone configuration file for manual testing:
+```python
+WIFI_SSID = "YOUR_WIFI_SSID"
+WIFI_PASSWORD = "YOUR_WIFI_PASSWORD"
+WS_SERVER = "ws://example.com"
+```
+
+### 🎯 [main.py](main.py)
+Standalone version for manual upload:
+- Same functionality as websocket_client.py
+- Use when not building custom firmware
 - **Start point**: Run `import main; main.main()`
 
 ### 🔄 [boot.py](boot.py)
-Boot script (optional):
-- Runs on ESP32 startup
-- Uncomment line to auto-start client
-- Currently: Manual start only
+Boot script example:
+- Shows how to auto-start on boot
+- Works with frozen modules
+- Copy to ESP32 filesystem if needed
 
 ---
 
