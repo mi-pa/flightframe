@@ -16,8 +16,7 @@ Edit `config.py`:
 ```python
 WIFI_SSID = "YourWiFiName"
 WIFI_PASSWORD = "YourPassword"
-WS_SERVER = "ws://192.168.1.100"  # Your server IP
-WS_PORT = 8080
+WS_SERVER = "ws://192.168.1.100:8080"  # Your server IP with port
 WS_PATH = "/ws"
 ```
 
