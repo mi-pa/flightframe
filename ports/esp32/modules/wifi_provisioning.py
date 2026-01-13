@@ -418,10 +418,13 @@ def start_provisioning():
     """Start WiFi provisioning mode"""
     provisioning = WiFiProvisioning(ap_ssid="FlightFrame-Setup", ap_password="")
     ip = provisioning.start_ap()
-    print(f"\n{'='*40}")
+    
+    separator = "=" * 40
+    print(f"\n{separator}")
     print("WiFi Provisioning Mode Active")
-    print(f"{'='*40}")
+    print(separator)
     print(f"1. Connect to WiFi: {provisioning.ap_ssid}")
     print(f"2. Open browser: http://{ip}")
-    print(f"{'='*40}\n")
+    print(f"{separator}\n")
+    
     provisioning.start_web_server()
