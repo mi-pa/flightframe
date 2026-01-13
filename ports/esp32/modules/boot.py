@@ -18,7 +18,7 @@ def connect_wifi():
     """Connect to WiFi using saved credentials"""
     import ws_config
     
-    sta = network.WLAN(network. STA_IF)
+    sta = network.WLAN(network.STA_IF)
     sta.active(True)
     
     if not sta.isconnected():
@@ -38,15 +38,11 @@ def connect_wifi():
             return False
     return True
 
+
+
 def main():
     """Main boot sequence"""
-    # Check if we need to enter provisioning mode
-    # Hold a button on boot to force provisioning (optional)
-    # For example, GPIO 0 (BOOT button on many ESP32 boards)
-    # button = machine.Pin(0, machine.Pin.IN, machine.Pin.PULL_UP)
-    # force_provisioning = button.value() == 0
-    
-    force_provisioning = False  # Set to True to force provisioning mode
+    force_provisioning = False
     
     if not check_wifi_configured() or force_provisioning:
         print("WiFi not configured. Starting provisioning mode...")
@@ -55,27 +51,17 @@ def main():
     else:
         if connect_wifi():
             print("Starting main application...")
-            # Import and start your main application here
-            # import main
-            # main.start()
+            # ✅ WebSocket-Client NUR starten wenn WiFi verbunden ist
+            try:
+                from websocket_client import main as ws_main
+                ws_main()
+            except ImportError as e:
+                print(f"Error importing websocket_client: {e}")
         else:
             print("Failed to connect.  Starting provisioning mode...")
             from wifi_provisioning import start_provisioning
             start_provisioning()
 
-# Run main sequence
-main()
+    gc.collect()
 
 
-
-# Import the WebSocket client main function
-# Note: websocket_client and ws_config are frozen into the firmware
-try:
-    from websocket_client import main
-    # Uncomment the line below to auto-start the WebSocket client on boot
-    main()
-except ImportError as e:
-    print(f"Error importing websocket_client: {e}")
-    print("Make sure the firmware includes the frozen websocket_client module")
-
-gc.collect()
