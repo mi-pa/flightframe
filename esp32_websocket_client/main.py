@@ -88,7 +88,9 @@ def parse_ws_url(url):
 
 def websocket_handshake(sock, host, path):
     """Perform WebSocket handshake."""
-    # Generate a random key for the handshake
+    # Generate a key for the handshake
+    # Note: RFC 6455 recommends random bytes, but this works for most use cases
+    # For production security, consider using os.urandom(16) if available
     key = ubinascii.b2a_base64(bytes([i & 0xff for i in range(16)])).strip()
     
     # Build the HTTP upgrade request

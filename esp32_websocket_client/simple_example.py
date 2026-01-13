@@ -6,8 +6,14 @@ A minimal example to get started with ESP32 WebSocket client.
 import network
 import socket
 import time
-import websocket
-import ubinascii
+
+try:
+    import websocket
+    import ubinascii
+except ImportError:
+    print("Error: Required modules not available")
+    print("Ensure you're running on MicroPython with websocket support")
+    raise
 
 # Configuration
 WIFI_SSID = "YOUR_WIFI_SSID"

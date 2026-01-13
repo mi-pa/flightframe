@@ -4,9 +4,14 @@
 
 ### 1. Flash MicroPython to ESP32
 ```bash
-cd /home/runner/work/flightframe/flightframe/ports/esp32
+# Navigate to the MicroPython ESP32 port directory
+cd ports/esp32
+
+# Download submodules and build
 make submodules
 make
+
+# Flash to your ESP32 device
 make erase
 make deploy
 ```
