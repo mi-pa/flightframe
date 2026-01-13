@@ -6,6 +6,8 @@ A minimal example to get started with ESP32 WebSocket client.
 import network
 import socket
 import time
+import websocket
+import ubinascii
 
 # Configuration
 WIFI_SSID = "YOUR_WIFI_SSID"
@@ -34,9 +36,6 @@ def connect_wifi():
 
 def websocket_connect():
     """Connect to WebSocket server."""
-    import websocket
-    import ubinascii
-    
     # Create socket
     addr = socket.getaddrinfo(SERVER_HOST, SERVER_PORT)[0][-1]
     sock = socket.socket()

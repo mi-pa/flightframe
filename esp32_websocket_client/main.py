@@ -7,12 +7,10 @@ import network
 import socket
 import time
 import ubinascii
-import hashlib
 from config import (
     WIFI_SSID,
     WIFI_PASSWORD,
     WS_SERVER,
-    WS_PORT,
     WS_PATH,
     RECONNECT_DELAY,
     MAX_RECONNECT_ATTEMPTS
@@ -58,7 +56,7 @@ def connect_wifi():
 
 
 def parse_ws_url(url):
-    """Parse WebSocket URL to extract host and port."""
+    """Parse WebSocket URL to extract host, port, and path."""
     # Remove ws:// or wss:// prefix
     if url.startswith("ws://"):
         secure = False
@@ -69,15 +67,23 @@ def parse_ws_url(url):
     else:
         secure = False
     
+    # Split host/port and path
+    if "/" in url:
+        host_port, path = url.split("/", 1)
+        path = "/" + path
+    else:
+        host_port = url
+        path = "/"
+    
     # Split host and port if present
-    if ":" in url:
-        host, port = url.split(":", 1)
+    if ":" in host_port:
+        host, port = host_port.split(":", 1)
         port = int(port)
     else:
-        host = url
+        host = host_port
         port = 443 if secure else 80
     
-    return host, port, secure
+    return host, port, path, secure
 
 
 def websocket_handshake(sock, host, path):
@@ -155,7 +161,10 @@ def websocket_listen():
     while True:
         try:
             # Parse WebSocket URL
-            host, port, secure = parse_ws_url(WS_SERVER)
+            host, port, path, secure = parse_ws_url(WS_SERVER)
+            # Use WS_PATH from config if URL doesn't contain path
+            if path == "/":
+                path = WS_PATH
             
             # Check if we have WiFi connection
             wlan = network.WLAN(network.STA_IF)
@@ -168,7 +177,7 @@ def websocket_listen():
                     continue
             
             # Connect to WebSocket server
-            ws = connect_websocket(host, port, WS_PATH)
+            ws = connect_websocket(host, port, path)
             print("Connected to WebSocket server")
             print("Listening for messages...")
             

@@ -11,11 +11,11 @@ import network
 import socket
 import time
 import json
+import ubinascii
 from config import (
     WIFI_SSID,
     WIFI_PASSWORD,
     WS_SERVER,
-    WS_PORT,
     WS_PATH
 )
 
@@ -51,7 +51,6 @@ def connect_wifi():
 
 def websocket_handshake(sock, host, path):
     """Perform WebSocket handshake."""
-    import ubinascii
     key = ubinascii.b2a_base64(bytes([i & 0xff for i in range(16)])).strip()
     
     request = (
@@ -95,13 +94,18 @@ def advanced_example():
     # Parse server URL
     ws_url = WS_SERVER
     if ws_url.startswith("ws://"):
-        host = ws_url[5:]
+        host = ws_url[5:].split(':')[0].split('/')[0]
+        if ':' in ws_url[5:]:
+            port = int(ws_url[5:].split(':')[1].split('/')[0])
+        else:
+            port = 80
     else:
-        host = ws_url
+        host = ws_url.split(':')[0].split('/')[0]
+        port = 80
     
     # Connect to WebSocket server
-    print(f"Connecting to {host}:{WS_PORT}{WS_PATH}")
-    addr_info = socket.getaddrinfo(host, WS_PORT)
+    print(f"Connecting to {host}:{port}{WS_PATH}")
+    addr_info = socket.getaddrinfo(host, port)
     addr = addr_info[0][-1]
     
     sock = socket.socket()

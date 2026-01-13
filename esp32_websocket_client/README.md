@@ -89,9 +89,9 @@ WIFI_SSID = "YOUR_WIFI_SSID"
 WIFI_PASSWORD = "YOUR_WIFI_PASSWORD"
 
 # WebSocket Server Configuration
-WS_SERVER = "ws://example.com"  # WebSocket server URL
-WS_PORT = 80  # WebSocket server port (80 for ws://, 443 for wss://)
-WS_PATH = "/ws"  # WebSocket path on the server
+# Format: "ws://hostname:port/path" or "wss://hostname:port/path"
+WS_SERVER = "ws://example.com:80"  # WebSocket server URL with port
+WS_PATH = "/ws"  # Default path if not specified in WS_SERVER URL
 
 # Connection Settings
 RECONNECT_DELAY = 5  # Seconds to wait before reconnecting
@@ -103,8 +103,10 @@ MAX_RECONNECT_ATTEMPTS = 10  # Maximum number of reconnection attempts (0 = infi
 - **WIFI_SSID**: Your WiFi network name
 - **WIFI_PASSWORD**: Your WiFi password
 - **WS_SERVER**: WebSocket server URL (ws:// for unsecured, wss:// for secured)
-- **WS_PORT**: Server port number (usually 80 for ws://, 443 for wss://)
-- **WS_PATH**: The path to the WebSocket endpoint on the server
+  - Format: `ws://hostname:port` or `ws://hostname:port/path`
+  - Port is optional (defaults to 80 for ws://, 443 for wss://)
+  - Examples: `ws://192.168.1.100:8080`, `wss://secure.example.com`
+- **WS_PATH**: The path to the WebSocket endpoint (used if not in WS_SERVER URL)
 - **RECONNECT_DELAY**: Time in seconds to wait before attempting to reconnect
 - **MAX_RECONNECT_ATTEMPTS**: Maximum reconnection attempts (set to 0 for infinite retries)
 
