@@ -1,2 +1,0 @@
-- name: Espressif (ESP-IDF) Build Action
-  uses: HareshPrajapati/esp_idf_build_action@V2
