@@ -12,7 +12,7 @@ import socket
 import time
 import json
 import ubinascii
-from config import (
+from ws_config import (
     WIFI_SSID,
     WIFI_PASSWORD,
     WS_SERVER,

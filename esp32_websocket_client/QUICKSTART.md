@@ -1,6 +1,30 @@
 # ESP32 WebSocket Client - Quick Start Guide
 
-## Quick Setup (3 Steps)
+## Two Installation Options
+
+### Option A: Build with Frozen Modules (Recommended for Production)
+
+The WebSocket client is now integrated into the firmware build system.
+
+**Advantages:**
+- No need to upload Python files
+- Faster startup and execution
+- Saves RAM (modules loaded from flash)
+- More reliable for production
+
+**Steps:**
+1. Configure settings: Edit `ports/esp32/modules/ws_config.py`
+2. Build: `cd ports/esp32 && make BOARD=ESP32_GENERIC`
+3. Flash: `make BOARD=ESP32_GENERIC PORT=/dev/ttyUSB0 deploy`
+4. Run: `import websocket_client; websocket_client.main()`
+
+See `ports/esp32/BUILD_INSTRUCTIONS.md` for detailed build instructions.
+
+### Option B: Upload Files Manually (Quick Testing)
+
+For rapid development and testing without rebuilding firmware.
+
+## Quick Setup - Option B (3 Steps)
 
 ### 1. Flash MicroPython to ESP32
 ```bash
@@ -9,11 +33,11 @@ cd ports/esp32
 
 # Download submodules and build
 make submodules
-make
+make BOARD=ESP32_GENERIC
 
 # Flash to your ESP32 device
-make erase
-make deploy
+make BOARD=ESP32_GENERIC PORT=/dev/ttyUSB0 erase
+make BOARD=ESP32_GENERIC PORT=/dev/ttyUSB0 deploy
 ```
 
 ### 2. Configure WiFi and Server
@@ -83,12 +107,28 @@ python test_server.py
 
 ## Files Overview
 
-- `main.py` - Main WebSocket client (start here)
-- `config.py` - Configuration (edit this first)
-- `boot.py` - Auto-start script (optional)
+**Examples in esp32_websocket_client/ (for reference/testing):**
+- `simple_example.py` - Standalone simple example
 - `advanced_example.py` - Bi-directional communication example
+- `boot.py` - Auto-start script example
 - `test_server.py` - Python test server for development
 - `README.md` - Full documentation
+
+**Frozen modules in ports/esp32/modules/ (built into firmware):**
+- `websocket_client.py` - Main WebSocket client implementation
+- `ws_config.py` - Configuration settings
+
+When using frozen modules, import with:
+```python
+import websocket_client
+import ws_config
+```
+
+When using manual upload, import with:
+```python
+import main
+import config
+```
 
 ## Example: Control LED via WebSocket
 

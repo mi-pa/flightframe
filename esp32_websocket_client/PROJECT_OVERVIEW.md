@@ -10,6 +10,50 @@ This is a complete MicroPython application for ESP32 microcontrollers that:
 4. **Handles Reconnection** - Automatically reconnects if the connection is lost
 5. **Extensible** - Easy to customize for your specific use case
 
+## Deployment Options
+
+### Option 1: Frozen Modules (Recommended for Production)
+
+The WebSocket client can be compiled directly into the MicroPython firmware:
+
+**Advantages:**
+- No need to upload Python files to the device
+- Faster execution (loaded from flash)
+- Saves RAM (modules stay in flash)
+- More reliable for production deployments
+- Simpler deployment process
+
+**Files Used:**
+- `ports/esp32/modules/websocket_client.py` - Main client (frozen)
+- `ports/esp32/modules/ws_config.py` - Configuration (frozen)
+
+**Usage:**
+```python
+import websocket_client
+websocket_client.main()
+```
+
+See `ports/esp32/BUILD_INSTRUCTIONS.md` for build instructions.
+
+### Option 2: Manual Upload (Recommended for Development)
+
+Upload Python files directly to the ESP32 filesystem:
+
+**Advantages:**
+- Quick iteration during development
+- No need to rebuild firmware for code changes
+- Easy to test different configurations
+
+**Files Used:**
+- `esp32_websocket_client/main.py` - Main client
+- `esp32_websocket_client/config.py` - Configuration
+
+**Usage:**
+```python
+import main
+main.main()
+```
+
 ## Architecture
 
 ```
@@ -51,31 +95,43 @@ This is a complete MicroPython application for ESP32 microcontrollers that:
 
 ## Files Explained
 
-### Core Files
+### Frozen Modules (Production - in ports/esp32/modules/)
 
-#### `config.py`
-Configuration file containing:
+#### `ws_config.py`
+Configuration module frozen into firmware:
 - WiFi credentials (SSID and password)
 - WebSocket server details (URL, port, path)
 - Connection settings (reconnect delay, max attempts)
 
-**Important**: Edit this file before running the client!
+**Important**: Edit this file before building the firmware!
 
-#### `main.py`
-Main application file that implements:
+#### `websocket_client.py`
+Main application frozen into firmware:
 - WiFi connection logic
 - WebSocket handshake
 - Message receiving loop
 - Error handling and reconnection
 - Message handler (customize this for your needs)
 
-This is the main entry point for the application.
+This is the main entry point when using frozen modules.
+
+### Example/Development Files (in esp32_websocket_client/)
+
+#### `config.py`
+Standalone configuration file for manual deployment:
+- Same structure as ws_config.py
+- Use when uploading files manually instead of building firmware
+
+#### `main.py`
+Standalone version of the WebSocket client:
+- Same functionality as websocket_client.py
+- Use for development and testing without building firmware
 
 #### `boot.py`
-Boot script that runs when ESP32 starts. By default, it:
-- Performs garbage collection
-- Imports main.py (but doesn't auto-start)
-- Can be modified to auto-start the WebSocket client
+Boot script example:
+- Shows how to auto-start the client on boot
+- Works with both frozen modules and manual uploads
+- Copy to ESP32 filesystem for auto-start functionality
 
 ### Example Files
 

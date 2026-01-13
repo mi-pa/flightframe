@@ -22,31 +22,64 @@ This is a MicroPython application for ESP32 that connects to a WebSocket server 
 
 ```
 esp32_websocket_client/
-├── boot.py       # Boot script (executed on startup)
-├── main.py       # Main WebSocket client implementation
-├── config.py     # Configuration file (WiFi, server settings)
-└── README.md     # This file
+├── boot.py               # Boot script example (for reference)
+├── simple_example.py     # Simple standalone example
+├── advanced_example.py   # Advanced example with GPIO control
+├── test_server.py        # Test WebSocket server for development
+└── README.md             # This file
+
+Frozen modules (in ports/esp32/modules/):
+├── websocket_client.py   # Main WebSocket client (frozen into firmware)
+└── ws_config.py          # Configuration module (frozen into firmware)
 ```
 
 ## Installation
 
-### 1. Install MicroPython on ESP32
+### Option 1: Build Firmware with Frozen Modules (Recommended)
+
+For production use, the WebSocket client can be frozen into the firmware:
+
+1. See `ports/esp32/BUILD_INSTRUCTIONS.md` for detailed build instructions
+2. The modules will be built into the firmware and available immediately on boot
+3. No need to upload Python files separately
+4. Saves RAM and simplifies deployment
+
+```bash
+# Build MicroPython with frozen WebSocket client
+cd ports/esp32
+make submodules
+make BOARD=ESP32_GENERIC
+
+# Flash to your ESP32 device
+make BOARD=ESP32_GENERIC PORT=/dev/ttyUSB0 erase
+make BOARD=ESP32_GENERIC PORT=/dev/ttyUSB0 deploy
+```
+
+Then use in REPL:
+```python
+>>> import websocket_client
+>>> websocket_client.main()
+```
+
+### Option 2: Upload Files Manually (Development)
+
+For development and testing, you can upload the files manually:
 
 Follow the official MicroPython ESP32 installation guide:
 https://docs.micropython.org/en/latest/esp32/tutorial/intro.html
 
 ```bash
-# Build MicroPython for ESP32
+# Build standard MicroPython for ESP32
 cd ports/esp32
 make submodules
-make
+make BOARD=ESP32_GENERIC
 
 # Flash to your ESP32 device
-make erase
-make deploy
+make BOARD=ESP32_GENERIC PORT=/dev/ttyUSB0 erase
+make BOARD=ESP32_GENERIC PORT=/dev/ttyUSB0 deploy
 ```
 
-### 2. Upload Files to ESP32
+### Upload Files to ESP32
 
 You can use various tools to upload the Python files to your ESP32:
 
