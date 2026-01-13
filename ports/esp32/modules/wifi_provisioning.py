@@ -123,6 +123,10 @@ class WiFiProvisioning:
                 request_line = request.split('\n')[0]
                 method = request_line.split()[0]
                 path = request_line.split()[1]
+
+                # Add method checking where needed
+                if path == '/connect' and method == 'POST': 
+                # handle connect request
                 
                 if path == '/': 
                     response = self.get_html_page()
